@@ -39,37 +39,37 @@ Aplikasi web ini adalah reimaginasi modern dari proyek aplikasi desktop yang say
 
 ### Langkah 1: Memulai Survei
 Klik tombol **"Start Survey Now"** untuk memulai.
-![Step 1](v5/Image/_1_start.png)
+![Step 1](Land_Measurement_WebApp/Image/_1_start.png)
 
 ---
 
 ### Langkah 2: Input Parameter Awal
 Masukkan jumlah titik pengukuran, elevasi awal (AMSL), dan tujuan survei.
-![Step 2](v5/Image/_2_data_init.png)
+![Step 2](Land_Measurement_WebApp/Image/_2_data_init.png)
 
 ---
 
 ### Langkah 3: Input Data Pengukuran
 Isi data benang atas, tengah, bawah, serta jarak antar titik.
-![Step 3](v5/Image/_3_input_thread.png)
+![Step 3](Land_Measurement_WebApp/Image/_3_input_thread.png)
 
 ---
 
 ### Langkah 4: Analisis Anomali dengan AI
 Gunakan Gemini AI untuk meninjau data Anda dan mendeteksi potensi anomali.
-![Step 4](v5/Image/_4_Analyze_anomalies.png)
+![Step 4](Land_Measurement_WebApp/Image/_4_Analyze_anomalies.png)
 
 ---
 
 ### Langkah 5: Lihat Hasil Tabel & Grafik
 Periksa hasil perhitungan dalam bentuk tabel yang rapi dan visualisasi grafik yang interaktif.
-![Step 6 & 7](v5/Image/_6_table.png)
+![Step 6 & 7](Land_Measurement_WebApp/Image/_6_table.png)
 
 ---
 
 ### Langkah 6: Hasilkan Laporan AI
 Buat ringkasan dan laporan survei profesional dengan satu kali klik menggunakan kekuatan AI.
-![Step 8](v5/Image/_8_ai_report.png)
+![Step 8](Land_Measurement_WebApp/Image/_8_ai_report.png)
 
 ---
 
