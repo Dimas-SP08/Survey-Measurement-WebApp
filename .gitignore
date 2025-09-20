@@ -1,5 +1,5 @@
 # Project-specific additions for Streamlit and VS Code
-.streamlit/secrets.toml
+Land_Measurement_WebApp/.streamlit/secrets.toml
 .vscode/
 
 # Byte-compiled / optimized / DLL files
