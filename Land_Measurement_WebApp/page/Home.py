@@ -1,41 +1,36 @@
+"""import necessary libraries"""
 import streamlit as st
-from PIL import Image
 from utils import *
 
 class HomePage:
     def __init__(self):
         pass
 
+    """Render the home page with navigation to other pages."""
     def render(self, navigate_to):
-        
         markdown(get_main_html())
         markdown(get_header_html("📊 Survey Measurement Application","Practical Solution for Field Survey Data Processing"))
-        tab1, tab2, tab3, tab4 = st.tabs(["Home", "Features", "How it Works","About"])
+        tab1, tab2, tab3, tab4 = tabs(["Home", "Features", "How it Works","About"])
         with tab1:
             write("")
             write("")
-            st.write("") # Memberi jarak
+            write("")
             
-            # --- Gambar Utama ---
             try:
-                # Ganti dengan path gambar yang relevan dengan survei atau teknologi.
                 st.image("Land_Measurement_WebApp/Image/surveyor.png", use_container_width=True, caption="by Gemini AI") 
             except Exception:
                pass
 
-            # --- Teks Pengantar ---
-            st.text("""
+            text("""
                     Welcome to the Survey Measurement Application. Transform raw field data into actionable insights.
                     This app streamlines elevation calculations, detects anomalies with AI,
                     and generates professional reports to save you time and enhance your accuracy.
                 """)
-                
+            markdown("___")
 
-            st.markdown("---")
-
-            # --- Sorotan Fitur Utama ---
             subheader("Why use this app?")
             write("")
+
             col1, col2, col3 = st.columns(3)
             with col1:
                 markdown(get_subheader_html(icon="🤖",subheader="AI Integration",text="Use Gemini AI to automatically detect anomalies in your survey data,and generate professional reports with ease."))
@@ -46,16 +41,15 @@ class HomePage:
             with col3:
                 markdown(get_subheader_html(icon="⚙️",subheader="Calculation Automation",text="you dont need to manual calculation. Enter thread data and let application count elevation and status for you"))
                 
-            st.write("") # Memberi jarak
-            st.write("") # Memberi jarak
+            st.write("")
+            st.write("")
             col_btn = columns([1, 2, 1])
-        markdown("___")
-        with col_btn[1]:
+            markdown("___")
+            with col_btn[1]:
 
-            if button("Start Survey Now", key="start_survey", use_container_width=True):
-                navigate_to("input_points")
+                if button("Start Survey Now", key="start_survey", use_container_width=True):
+                    navigate_to("input_points")
 
-        
         with tab2:
             subheader("Features")
             markdown("""
@@ -73,20 +67,23 @@ class HomePage:
                         - **Interactive charts:** elevation profile, height difference, and distance vs elevation
                         - **Easy navigation and confirmation dialogs to prevent data loss**
                         """)
-        with tab3:
-        
-            markdown("___")
-            self.part_image("""1. Click Start Survey Now""","Land_Measurement_WebApp/Image/_1_start.png","Begin your survey by clicking the **Start Survey Now** button on the home page.")
-            self.part_image("""2. Input initial parameters""","Land_Measurement_WebApp/Image/_2_data_init.png","Enter the initial parameters for your survey, including the number of points, initial elevation (AMSL), and survey purpose.")
-            self.part_image("""3. Configure measurement threads""","Land_Measurement_WebApp/Image/_3_input_thread.png","Set up the measurement threads for your survey points, specifying top, mid, and bottom inputs as needed.")
-            self.part_image("""4. Analyze anomaly with AI Gemini""","Land_Measurement_WebApp/Image/_4_Analyze_anomalies.png","Click the **Analyze** button to let AI review your data for potential anomalies.")
-            self.part_image("""5. Submit""","Land_Measurement_WebApp/Image/_5_submit.png","After reviewing and making any necessary adjustments, click **Submit** to finalize your data.")
-            self.part_image("""6. View table results""","Land_Measurement_WebApp/Image/_6_table.png","Examine the clean tabular results of your survey, including calculated elevations and height differences.")
-            self.part_image("""7. Explore graphical analysis""","Land_Measurement_WebApp/Image/_7_graphics.png","Interact with various charts, such as elevation profiles and height difference graphs, to visualize your survey data.")    
-            self.part_image("""8. generate AI-powered report""","Land_Measurement_WebApp/Image/_8_ai_report.png","Generate a professional survey report using AI, summarizing your findings and any detected anomalies.")
-        with tab4:
             
+        with tab3:
+            markdown("___")
+            self.steps("""1. Click Start Survey Now""","Land_Measurement_WebApp/Image/_1_start.png","Begin your survey by clicking the **Start Survey Now** button on the home page.")
+            self.steps("""2. Input initial parameters""","Land_Measurement_WebApp/Image/_2_data_init.png","Enter the initial parameters for your survey, including the number of points, initial elevation (AMSL), and survey purpose.")
+            self.steps("""3. Configure measurement threads""","Land_Measurement_WebApp/Image/_3_input_thread.png","Set up the measurement threads for your survey points, specifying top, mid, and bottom inputs as needed.")
+            self.steps("""4. Analyze anomaly with AI Gemini""","Land_Measurement_WebApp/Image/_4_Analyze_anomalies.png","Click the **Analyze** button to let AI review your data for potential anomalies.")
+            self.steps("""5. Submit""","Land_Measurement_WebApp/Image/_5_submit.png","After reviewing and making any necessary adjustments, click **Submit** to finalize your data.")
+            self.steps("""6. View table results""","Land_Measurement_WebApp/Image/_6_table.png","Examine the clean tabular results of your survey, including calculated elevations and height differences.")
+            self.steps("""7. Explore graphical analysis""","Land_Measurement_WebApp/Image/_7_graphics.png","Interact with various charts, such as elevation profiles and height difference graphs, to visualize your survey data.")    
+            self.steps("""8. generate AI-powered report""","Land_Measurement_WebApp/Image/_8_ai_report.png","Generate a professional survey report using AI, summarizing your findings and any detected anomalies.")
+        
+        with tab4:
             header("About This Application")
+            write("")
+            markdown("___")
+
             subheader("My Mission")
             markdown(
                 """The Survey Measurement Application was developed with the goal of revolutionizing traditional survey data processing.
@@ -144,13 +141,9 @@ class HomePage:
                 markdown(get_subheader_html(subheader="WhatsApp",icon=f"{whatshap_icon}",text="Contact me directly on WhatsApp for quick questions."))
                 if link_button("WhatsApp","https://wa.me/+62895343842200",key="whatsapp"):
                     pass
-
-            
-
-            
     
-
-    def part_image(self,title,image_path,text):
+    """Render a step with title, image, and description."""
+    def steps(self,title,image_path,text):
         try:
             subheader(title)
             col = columns([2,1])
@@ -159,7 +152,7 @@ class HomePage:
             with col[1]:
                 markdown(text)
             markdown("___")
-        except Exception as e:
+        except Exception :
             st.error(f"Image not found")
 
         

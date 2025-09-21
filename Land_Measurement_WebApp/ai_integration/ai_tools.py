@@ -2,7 +2,6 @@ import google.generativeai as genai
 import os
 
 class GeminiClient:
-    """Client untuk Google Gemini API"""
     
     def __init__(self,api_code):
         api_key = api_code
