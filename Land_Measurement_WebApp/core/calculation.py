@@ -21,9 +21,14 @@ class Survey_CTRL:
         '''Calculate mid thread from top and bottom thread'''
         if top_thread != 0 and bottom_thread != 0:                       
             result_mid_thread = (top_thread + bottom_thread) / 2
-            return result_mid_thread
+            if result_mid_thread == mid_thread:
+                validate = "valid"
+            else:
+                validate = "invalid"
+            return result_mid_thread,validate
         else:
-            return mid_thread
+            validate = False
+            return mid_thread,validate
 
         
 

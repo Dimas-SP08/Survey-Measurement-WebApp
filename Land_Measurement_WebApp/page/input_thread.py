@@ -1,5 +1,5 @@
 from core import Survey_CTRL,Survey_Point
-from ai_integration import GeminiClient
+from ai_integration import GeminiClient,prompt_for_detect_anomalies
 import re,json
 from utils import  *
 
@@ -50,9 +50,16 @@ class InputThreadsPage:
                     bottom_thread = number_input("Enter bottom thread (0 if empty):", key=f"bottom{i}",format="%.5f")
                     self.thread_info("bottom",backsight_ai,"desc_bottom")
             
-                    Backsight = self.calculate.calculate_mid_thread(top_thread, mid_thread, bottom_thread)
+                    Backsight,validate = self.calculate.calculate_mid_thread(top_thread, mid_thread, bottom_thread)
+                    if validate:
+                        markdown("___")
+                        info(f"""
+                             $$
+                             \\text{{mid thread}} = \\frac{{{top_thread} + {bottom_thread}}}{{2}}
+                             $$
+                            {mid_thread} = {Backsight} m -> **{validate}**""")
 
-                    # --- FORESIGHT ---
+                   
                 with col2:
                     subheader(f"Enter {label2} (FORESIGHT)")
 
@@ -65,7 +72,14 @@ class InputThreadsPage:
                     bottom_thread2 = number_input("Enter bottom thread (0 if empty):", key=f"bottom2{i}",format="%.5f")
                     self.thread_info("bottom",foresight_ai,"desc_bottom")
                     
-                    foresight = self.calculate.calculate_mid_thread(top_thread2, mid_thread2, bottom_thread2)
+                    foresight,validate = self.calculate.calculate_mid_thread(top_thread2, mid_thread2, bottom_thread2)
+                    if validate:
+                        markdown("___")
+                        info(f"""
+                             $$
+                             \\text{{mid thread}} = \\frac{{{top_thread2} + {bottom_thread2}}}{{2}}
+                             $$
+                            {mid_thread2} = {foresight} m -> **{validate}**""")
 
                 # --- DISTANCE ---
                 subheader(f"Distance for {label}")
@@ -82,90 +96,22 @@ class InputThreadsPage:
             temp_raw_data.append(raw_data_point)
 
             result = Survey_Point(label, Backsight, foresight, distance, amsl)
-            result_dict = result.to_dict(result.label, result.backsight, result.foresight, result.distance, result.heightdiff, result.elevation, result.status)
+            result_dict = result.to_dict()
             amsl = result.elevation
             temp_results.append(result_dict)
             
             # Increment counters for next point
             self.calculate.ascii += 1
             self.calculate.point_group_index += 1
-
-        # --- Final Actions Control Panel ---
-        # --- Final Actions Control Panel ---
-        markdown("___")
+            markdown("___")
+        
         col = columns([1, 2, 1])
         with col[1]:
             subheader("AI Analyze for Anomaly")
         with container():
             with col[1]:
                 if button("Analyze", key="analyze", type="secondary",use_container_width=True):
-                    prompt = f"""
-                        You are a **professional surveying QA analyst**.
-                        Analyze the following measurement data and flag potential anomalies.
-
-                        ### INPUT DATA:
-                        {temp_raw_data}
-
-                        ### ANALYSIS RULES:
-                        1. For each point (`backsight`, `foresight`, and `distance`):
-                           - **If both top and bottom readings are provided (non-zero):**
-                             - Calculate expected mid = (top + bottom) / 2.
-                             - Compare provided mid with expected mid.
-                             - Flag `"mid": "True"` if deviation is significant (beyond normal tolerance, e.g., >2–3 mm).
-                             - Description should clearly state the difference, e.g.:
-                               - "Mid reading 4mm higher than average of top and bottom"
-                               - "Mid reading within acceptable tolerance (matches average)"
-                           - **If top = 0 or bottom = 0:**
-                             - Do not calculate expected mid, accept mid as-is.
-                             - Mark top or bottom as `"False"` with description:
-                               - `"desc_top": "No top reading provided – assumed safe"`
-                               - `"desc_bottom": "No bottom reading provided – assumed safe"`
-                           - **Top / Bottom checks:**
-                             - If provided (≠ 0), verify they are within tolerance range.
-                             - Mark `"True"` only if they deviate too much, otherwise `"False"` with description "Within acceptable tolerance".
-                        2. **Distance check:**
-                           - Mark `"dist": "True"` if outside expected range and explain deviation (e.g., "Distance exceeds tolerance by 0.8m").
-                           - Otherwise mark `"dist": "False"` and describe "Distance within acceptable range".
-
-                        ### OUTPUT FORMAT:
-                        Return **ONLY** a valid JSON array.
-                        Do not include backticks, code fences, or extra commentary.
-                        Use this exact structure:
-
-                        [
-                          {{
-                            "backsight1": {{
-                              "mid": "True",
-                              "desc_mid": "Mid reading 5mm higher than average of top and bottom",
-                              "top": "False",
-                              "desc_top": "Within acceptable tolerance",
-                              "bottom": "False",
-                              "desc_bottom": "Within acceptable tolerance"
-                            }},
-                            "foresight1": {{
-                              "mid": "False",
-                              "desc_mid": "Mid reading matches average (within tolerance)",
-                              "top": "False",
-                              "desc_top": "No top reading provided – assumed safe",
-                              "bottom": "False",
-                              "desc_bottom": "No bottom reading provided – assumed safe"
-                            }},
-                            "distance1": {{
-                              "dist": "False",
-                              "desc": "Distance within acceptable range"
-                            }}
-                          }},
-                          ...
-                        ]
-
-                        ### STYLE REQUIREMENTS:
-                        - Always use short, professional, clear explanations.
-                        - Be precise: if possible, mention how far mid deviates from expected average.
-                        - Use the exact phrases:
-                          - `"No ... reading provided – assumed safe"` for missing top/bottom.
-                          - `"Within acceptable tolerance"` for values that are OK.
-                          - `"deviates by X mm"` for out-of-range readings.
-                        """
+                    prompt = prompt_for_detect_anomalies(temp_raw_data)
                     with spinner('AI Assistant is analyzing your data...'):
                         try:
                             ai = GeminiClient(secrets("model"))

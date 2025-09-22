@@ -32,25 +32,17 @@ class Survey_Point:
         else:
             return "FLAT"
 
-    def to_dict(self,
-                label : str,
-                backsight : float,
-                foresight : float,
-                distance : float,
-                heightdiffer : float,
-                elevation : float,
-                status : str
-                ) -> dict:
+    def to_dict(self) -> dict:
         
         '''Convert point data to a dict for tables''' 
         return {
-            "POINT NUMBER":label,
-            "BACKSIGHT":backsight,
-            "FORESIGHT":foresight,
-            "DISTANCE (m)":distance,
-            "HEIGHT DIFFERENCE":heightdiffer,
-            "ELEVATION (AMSL)":elevation,
-            "STATUS":status
+            "POINT NUMBER":self.label,
+            "BACKSIGHT":self.backsight,
+            "FORESIGHT":self.foresight,
+            "DISTANCE (m)":self.distance,
+            "HEIGHT DIFFERENCE":self.heightdiff,
+            "ELEVATION (AMSL)":self.elevation,
+            "STATUS":self.status
         }
         
      

@@ -12,7 +12,6 @@ class MainApp():
             "results": ResultsPage(),
             }
         
-        """Initialize session state for current page"""
         if "current_page" not in session_state():
             set_state("current_page","home")
             set_state("results", [])
@@ -31,7 +30,7 @@ class MainApp():
     def run(self):
         self.render_current_page()
 
-"""main entry point"""
+
 if __name__ == "__main__":
     app = MainApp()
     app.run()

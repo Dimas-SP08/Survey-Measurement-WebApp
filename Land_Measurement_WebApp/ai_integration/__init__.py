@@ -1,1 +1,2 @@
 from .ai_tools import GeminiClient
+from .prompts import prompt_for_detect_anomalies,prompts_make_report
