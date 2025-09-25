@@ -14,6 +14,7 @@ class InputThreadsPage:
         amsl = get_state("initial_amsl")
         temp_results = []
         temp_raw_data = []
+        file = get_state('file')
 
         markdown("___")
         warning("⚠️ If the top and bottom threads are used, the mid thread will verify the average of top and bottom")
@@ -25,6 +26,8 @@ class InputThreadsPage:
             is_expanded = i == 0
             
             with expander(f"Measurement for Point: {label}", expanded=is_expanded):
+                
+
                 # Get AI result for the current point if it exists
                 ai_result = get_state("ai_result", [])
                 backsight_ai, foresight_ai, distance_ai = {}, {}, {}
@@ -37,14 +40,24 @@ class InputThreadsPage:
 
                
                 col1, col2 = columns(2)
+                default_mid_Backsight= 0.0
+                default_mid_foresight = 0.0
+                if file is not None and i < len(file) and "BACKSIGHT" in file.columns:
+                    try:
+                        default_mid_Backsight = float(file.loc[i,"BACKSIGHT"])
+                        default_mid_foresight = float(file.loc[i,"FORESIGHT"])
+                    except:
+                        default_mid_Backsight = None
+                        default_mid_foresight = None
                 with col1:
                     subheader(f"Enter {label1} (BACKSIGHT)")
+
 
                     top_thread = number_input("Enter top thread (0 if empty):", key=f"top{i}",format="%.5f" ) 
                     self.thread_info("top",backsight_ai,"desc_top")
                     
 
-                    mid_thread = number_input("Enter mid thread:", key=f"mid{i}",format="%.5f")
+                    mid_thread = number_input("Enter mid thread:", key=f"mid{i}",format="%.5f",value=default_mid_Backsight)
                     self.thread_info("mid",backsight_ai,"desc_mid")
 
                     bottom_thread = number_input("Enter bottom thread (0 if empty):", key=f"bottom{i}",format="%.5f")
@@ -66,7 +79,7 @@ class InputThreadsPage:
                     top_thread2 = number_input("Enter top thread (0 if empty):", key=f"top2{i}",format="%.5f")
                     self.thread_info("top",foresight_ai,"desc_top")
                     
-                    mid_thread2 = number_input("Enter mid thread:", key=f"mid2{i}",format="%.5f")
+                    mid_thread2 = number_input("Enter mid thread:", key=f"mid2{i}",format="%.5f",value= default_mid_foresight)
                     self.thread_info("mid",foresight_ai,"desc_mid")
                     
                     bottom_thread2 = number_input("Enter bottom thread (0 if empty):", key=f"bottom2{i}",format="%.5f")

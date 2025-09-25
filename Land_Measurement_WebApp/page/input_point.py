@@ -1,6 +1,10 @@
 """import necessary libraries"""
 from utils import *
 
+from ai_integration import make_ai_analyze
+from ai_integration import GeminiClient
+import json,re
+
 class InputPointsPage:
     def __init__(self):
         pass
@@ -39,6 +43,17 @@ class InputPointsPage:
         
 
         # Action Buttons
+        file =st.file_uploader("upload_file")
+        if file is not None:
+            try:
+                upload = read_excel(file)
+                if "BACKSIGHT" and "FORESIGHT" in upload.columns:
+                    success("your file meet the standard app")
+                    set_state("file",upload)
+            except:
+                error("your file not meet the standard, and will not influence the thread values")
+        else:
+            set_state("file",None)
         col = columns([1,2,1,2,1])
         
         with col[1]:
@@ -54,6 +69,8 @@ class InputPointsPage:
 
                 navigate_to("input_threads")
 
+        
+        
         
 
     

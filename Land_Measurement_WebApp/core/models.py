@@ -8,8 +8,8 @@ class Survey_Point:
                  distance : float,
                  initial_elev : float
                  ) -> None:
+        
         '''Create a survey point'''
-
         self.label : str = label
         self.distance : float = distance
         self.backsight: float = backsight
@@ -33,7 +33,6 @@ class Survey_Point:
             return "FLAT"
 
     def to_dict(self) -> dict:
-        
         '''Convert point data to a dict for tables''' 
         return {
             "POINT NUMBER":self.label,
