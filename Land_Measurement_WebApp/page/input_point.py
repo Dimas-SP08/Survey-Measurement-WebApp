@@ -1,7 +1,7 @@
 """import necessary libraries"""
 from utils import *
 
-from ai_integration import make_ai_analyze
+
 from ai_integration import GeminiClient
 import json,re
 
