@@ -15,12 +15,14 @@ class InputThreadsPage:
         temp_results = []
         temp_raw_data = []
         file = get_state('file')
+        cumulative_dist= 0
 
         markdown("___")
         warning("⚠️ If the top and bottom threads are used, the mid thread will verify the average of top and bottom")
         # Loop through each point and create an expander for its inputs
-        for i in range(get_state('point')):
+        for i in range(get_state('point')-1):
             label, label1, label2 = self.calculate.add_point()
+            default_dist = 0.0
             
             # The first expander is open by default to guide the user
             is_expanded = i == 0
@@ -63,14 +65,19 @@ class InputThreadsPage:
                     bottom_thread = number_input("Enter bottom thread (0 if empty):", key=f"bottom{i}",format="%.5f")
                     self.thread_info("bottom",backsight_ai,"desc_bottom")
             
-                    Backsight,validate = self.calculate.calculate_mid_thread(top_thread, mid_thread, bottom_thread)
-                    if validate:
+                    Backsight,validate_b,dist1 = self.calculate.calculate_mid_thread_and_dist(top_thread, mid_thread, bottom_thread)
+                    if validate_b:
+                        
                         markdown("___")
                         info(f"""
-                             $$
-                             \\text{{mid thread}} = \\frac{{{top_thread} + {bottom_thread}}}{{2}}
-                             $$
-                            {mid_thread} = {Backsight} m -> **{validate}**""")
+                                 $$
+                                 \\text{{mid thread}} = \\frac{{{top_thread} + {bottom_thread}}}{{2}}
+                                 $$
+                                 {mid_thread} = {Backsight} m -> {validate_b}
+                                 $$
+                                 d1 = ({{{top_thread} - {bottom_thread}}}) \\times 100 = {dist1}
+                                 
+                                 """)
 
                    
                 with col2:
@@ -85,18 +92,30 @@ class InputThreadsPage:
                     bottom_thread2 = number_input("Enter bottom thread (0 if empty):", key=f"bottom2{i}",format="%.5f")
                     self.thread_info("bottom",foresight_ai,"desc_bottom")
                     
-                    foresight,validate = self.calculate.calculate_mid_thread(top_thread2, mid_thread2, bottom_thread2)
-                    if validate:
+                    foresight,validate_f,dist2 = self.calculate.calculate_mid_thread_and_dist(top_thread2, mid_thread2, bottom_thread2)
+                    if validate_f:
                         markdown("___")
+                        
                         info(f"""
-                             $$
-                             \\text{{mid thread}} = \\frac{{{top_thread2} + {bottom_thread2}}}{{2}}
-                             $$
-                            {mid_thread2} = {foresight} m -> **{validate}**""")
+                                 $$
+                                 \\text{{mid thread}} = \\frac{{{top_thread2} + {bottom_thread2}}}{{2}}
+                                 $$
+                                 {mid_thread2} = {foresight} m -> {validate_f}
+                                 $$
+                                 d2 = ({{{top_thread2} - {bottom_thread2}}}) \\times 100 = {dist2}
+                                 
+                                 
+                                 """)
 
                 # --- DISTANCE ---
                 subheader(f"Distance for {label}")
-                distance = number_input("Enter distance:", key=f"distance{i}",format="%.5f")
+                if validate_f and validate_b:
+                    default_dist += dist1 + dist2
+                    info(f"""
+                             $$
+                             \\text{{DISTANCE}} = d1 + d2 = {default_dist}
+                             """)
+                distance = number_input("Enter distance:", key=f"distance{i}",format="%.5f",value=default_dist)
                 self.thread_info("dist",distance_ai,"desc")
 
             # --- Data Aggregation ---
@@ -108,13 +127,13 @@ class InputThreadsPage:
             }
             temp_raw_data.append(raw_data_point)
 
-            result = Survey_Point(label, Backsight, foresight, distance, amsl)
+            result = Survey_Point(label, Backsight, foresight, distance,cumulative_dist, amsl)
             result_dict = result.to_dict()
             amsl = result.elevation
+            cumulative_dist += result.distance
             temp_results.append(result_dict)
             
             # Increment counters for next point
-            self.calculate.ascii += 1
             self.calculate.point_group_index += 1
             markdown("___")
         

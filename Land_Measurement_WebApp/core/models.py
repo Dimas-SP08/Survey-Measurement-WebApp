@@ -6,15 +6,18 @@ class Survey_Point:
                  backsight : float,
                  foresight : float,
                  distance : float,
+                 cumulative_dist : float,
                  initial_elev : float
                  ) -> None:
         
         '''Create a survey point'''
         self.label : str = label
         self.distance : float = distance
+        self.cumulative_dist = cumulative_dist
         self.backsight: float = backsight
         self.foresight : float = foresight
 
+        self.cumulative_dist += distance
         heightdiffer = backsight - foresight
         initial_elev += heightdiffer
         stats = self.predict_status(heightdiffer)
@@ -39,6 +42,7 @@ class Survey_Point:
             "BACKSIGHT":self.backsight,
             "FORESIGHT":self.foresight,
             "DISTANCE (m)":self.distance,
+            "CUMULATIVE DISTANCE (m)":self.cumulative_dist,
             "HEIGHT DIFFERENCE":self.heightdiff,
             "ELEVATION (AMSL)":self.elevation,
             "STATUS":self.status
