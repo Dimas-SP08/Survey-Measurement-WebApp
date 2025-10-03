@@ -113,7 +113,7 @@ class InputThreadsPage:
                     default_dist += dist1 + dist2
                     info(f"""
                              $$
-                             \\text{{DISTANCE}} = d1 + d2 = {default_dist}
+                             \\text{{DISTANCE}} = d1 + d2 = {dist1} + {dist2} = {default_dist}
                              """)
                 distance = number_input("Enter distance:", key=f"distance{i}",format="%.5f",value=default_dist)
                 self.thread_info("dist",distance_ai,"desc")
@@ -147,7 +147,7 @@ class InputThreadsPage:
                     with spinner('AI Assistant is analyzing your data...'):
                         try:
                             ai = GeminiClient(secrets("model"))
-                            response = ai.genrate_content(prompt, "gemini-1.5-flash", 0.0)
+                            response = ai.genrate_content(prompt, "gemini-2.0-flash", 0.0)
                             clean_response = re.sub(r"```(?:json)?\s*", "", response)
                             clean_response = re.sub(r"```", "", clean_response)
                             clean_response = re.sub(r",\s*]", "]", clean_response)
