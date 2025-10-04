@@ -46,6 +46,7 @@ def prompt_for_detect_anomalies(data):
 
             ### IMPORTANT NOTES:
             - Use "True" if anomaly detected, "False" if normal
+            - You must add the number at ,foresight1,foresight2....... and other, include backsight and distance
             - Keep descriptions concise but informative
             - If top/bottom are 0, assume they're not measured and mark as "False"
             - Focus on technical surveying accuracy

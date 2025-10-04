@@ -15,7 +15,6 @@ class HomePage:
             write("")
             write("")
             write("")
-            
             try:
                 st.image("Land_Measurement_WebApp/Image/surveyor.png", use_container_width=True, caption="by Gemini AI") 
             except Exception:

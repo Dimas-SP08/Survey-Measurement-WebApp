@@ -7,24 +7,20 @@ class ResultsPage:
         pass
 
     def render(self,navigate_to):
-        # Custom CSS for the professional burgundy theme
         markdown(get_main_html())
 
-        # Header Section "Survey Analysis & Results" 
         markdown(get_header_html("Survey Analysis & Results","Review the measurement data, graphical analysis, and AI-generated report"))
 
-        # Data processing
         try:
             self.result = pd.DataFrame(get_state("results"))
             if self.result.empty:
                 warning("No measurement data found to display.")
-                return # Hentikan render jika tidak ada data
+                return 
         except Exception as e:
             error(f"Failed to process measurement data: {e}")
-            return # Hentikan render jika data error
+            return 
         self.buffer_excel = export_to_excel(self.result)
         
-        # Main content tabs
         tab1, tab2, tab3 = tabs(["Data Table", "Graphical Analysis", "AI-Generated Report"])
         
         with tab1:

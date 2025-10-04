@@ -3,14 +3,12 @@ import streamlit as st
 import pandas as pd
 from PIL import Image
 def process_data(data):
-    """Simulasi proses data"""
     with st.spinner("Process data..."):
         import time
         time.sleep(2)
     return data * 2
 
 def show_toast(message, icon="ℹ️"):
-    """Menampilkan toast message"""
     st.toast(message, icon=icon)
 
 def markdown(text):

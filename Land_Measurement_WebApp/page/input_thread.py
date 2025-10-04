@@ -19,18 +19,13 @@ class InputThreadsPage:
 
         markdown("___")
         warning("⚠️ If the top and bottom threads are used, the mid thread will verify the average of top and bottom")
-        # Loop through each point and create an expander for its inputs
+        
         for i in range(get_state('point')-1):
             label, label1, label2 = self.calculate.add_point()
-            default_dist = 0.0
-            
-            # The first expander is open by default to guide the user
+            default_dist = 0.0        
             is_expanded = i == 0
-            
-            with expander(f"Measurement for Point: {label}", expanded=is_expanded):
-                
 
-                # Get AI result for the current point if it exists
+            with expander(f"Measurement for Point: {label}", expanded=is_expanded):
                 ai_result = get_state("ai_result", [])
                 backsight_ai, foresight_ai, distance_ai = {}, {}, {}
                 if len(ai_result) > i:
@@ -39,8 +34,6 @@ class InputThreadsPage:
                     foresight_ai = point_ai_data.get(f"foresight{i+1}", {})
                     distance_ai = point_ai_data.get(f"distance{i+1}", {})
 
-
-               
                 col1, col2 = columns(2)
                 default_mid_Backsight= 0.0
                 default_mid_foresight = 0.0
@@ -107,7 +100,6 @@ class InputThreadsPage:
                                  
                                  """)
 
-                # --- DISTANCE ---
                 subheader(f"Distance for {label}")
                 if validate_f and validate_b:
                     default_dist += dist1 + dist2
@@ -118,7 +110,6 @@ class InputThreadsPage:
                 distance = number_input("Enter distance:", key=f"distance{i}",format="%.5f",value=default_dist)
                 self.thread_info("dist",distance_ai,"desc")
 
-            # --- Data Aggregation ---
             raw_data_point = {
                 "point_label": label,
                 "backsight": {"top": top_thread, "mid": mid_thread, "bottom": bottom_thread},
@@ -133,7 +124,6 @@ class InputThreadsPage:
             cumulative_dist += result.distance
             temp_results.append(result_dict)
             
-            # Increment counters for next point
             self.calculate.point_group_index += 1
             markdown("___")
         
@@ -154,6 +144,7 @@ class InputThreadsPage:
                             clean_response = clean_response.strip()
                             try:
                                 parsed = json.loads(clean_response)
+                                print(parsed)
                                 set_state("ai_result", parsed)
                                 rerun()
                             except json.JSONDecodeError:
@@ -167,7 +158,6 @@ class InputThreadsPage:
 
 
         col = columns([1,2,1,2,1])
-        # ...existing code...
 
         with col[1]:
             if button("Back", key="back_point", type="primary", use_container_width=True):
@@ -176,11 +166,11 @@ class InputThreadsPage:
                 confirm_and_process("Are you sure you want to go back?", result_name="confirm_result_back")
             if get_state("confirm_result_back") is True:
                 set_state("show_confirm_dialog_back",False)
-                set_state("confirm_result_back",None ) # reset
+                set_state("confirm_result_back",None ) 
                 navigate_to("input_points")
             elif get_state("confirm_result_back") is False:
                 set_state("show_confirm_dialog_back",False)
-                set_state("confirm_result_back",None ) # reset
+                set_state("confirm_result_back",None ) 
         
         
         with col[3]:
@@ -190,12 +180,12 @@ class InputThreadsPage:
                 confirm_and_process("Are you sure you want to submit the data? You won't be able to edit later.", result_name="confirm_result_submit")
             if get_state("confirm_result_submit") is True:
                 set_state("show_confirm_dialog_submit" , False)
-                set_state("confirm_result_submit" , None ) # reset
+                set_state("confirm_result_submit" , None ) 
                 set_state("results", temp_results)
                 navigate_to("results")
             elif get_state("confirm_result_submit") is False:
                 set_state("show_confirm_dialog_submit" ,False)
-                set_state("confirm_result_submit" , None)  # reset
+                set_state("confirm_result_submit" , None)  
 
     def thread_info(self,thread_type,ai_thread,desc_thread):
         if ai_thread:

@@ -1,10 +1,5 @@
 """import necessary libraries"""
 from utils import *
-
-
-from ai_integration import GeminiClient
-import json,re
-
 class InputPointsPage:
     def __init__(self):
         pass
